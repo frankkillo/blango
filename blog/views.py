@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+#from django.views.decorators.cache import cache_page
+#from django.views.decorators.vary import vary_on_cookie
 
 from blog.models import Post
 from blog.forms import CommentForm
-
 import logging
 
 logger = logging.getLogger(__name__)
