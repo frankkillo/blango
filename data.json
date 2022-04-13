@@ -1,0 +1,144 @@
+[
+    {
+        "model": "blog.comment",
+        "pk": 1,
+        "fields": {
+            "creator": 1,
+            "content": "i waited it!!!",
+            "content_type": 8,
+            "object_id": 3,
+            "created_at": "2022-04-09T13:40:04.551Z",
+            "modified_at": "2022-04-09T13:40:04.551Z"
+        }
+    },
+    {
+        "model": "blog.comment",
+        "pk": 2,
+        "fields": {
+            "creator": 1,
+            "content": "Where is continue???",
+            "content_type": 8,
+            "object_id": 3,
+            "created_at": "2022-04-09T17:44:24.345Z",
+            "modified_at": "2022-04-09T17:44:24.345Z"
+        }
+    },
+    {
+        "model": "blog.comment",
+        "pk": 3,
+        "fields": {
+            "creator": 1,
+            "content": "u robbed my time!",
+            "content_type": 8,
+            "object_id": 3,
+            "created_at": "2022-04-11T09:24:56.910Z",
+            "modified_at": "2022-04-11T09:24:56.910Z"
+        }
+    },
+    {
+        "model": "blog.comment",
+        "pk": 4,
+        "fields": {
+            "creator": 1,
+            "content": "Where is continue? I 've been waiting for months .",
+            "content_type": 8,
+            "object_id": 3,
+            "created_at": "2022-04-11T09:30:17.909Z",
+            "modified_at": "2022-04-11T09:30:17.909Z"
+        }
+    },
+    {
+        "model": "blog.tag",
+        "pk": 1,
+        "fields": {
+            "value": "D"
+        }
+    },
+    {
+        "model": "blog.post",
+        "pk": 1,
+        "fields": {
+            "author": 1,
+            "title": "First post",
+            "slug": "first-post",
+            "summary": "my first post in this app",
+            "content": "What are we going to do with all this future",
+            "published_at": "2022-04-08T14:14:24Z",
+            "created_at": "2022-04-08T14:14:32.018Z",
+            "modified_at": "2022-04-08T14:14:32.018Z",
+            "tags": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "blog.post",
+        "pk": 2,
+        "fields": {
+            "author": 1,
+            "title": "Second post",
+            "slug": "second-post",
+            "summary": "no",
+            "content": "Nothing",
+            "published_at": "2022-04-08T14:15:35Z",
+            "created_at": "2022-04-08T14:15:36.948Z",
+            "modified_at": "2022-04-08T14:15:36.948Z",
+            "tags": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "blog.post",
+        "pk": 3,
+        "fields": {
+            "author": 2,
+            "title": "Learning Django",
+            "slug": "learning-django",
+            "summary": "A post that will answer the question: \"How to learn Django?\".",
+            "content": "First step.\r\n    Go to the Coursera and find course Python for Everybody.\r\n\r\nto be continue...",
+            "published_at": "2022-04-09T11:04:39Z",
+            "created_at": "2022-04-09T11:02:11.034Z",
+            "modified_at": "2022-04-09T11:04:40.616Z",
+            "tags": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "blango_auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dmNYbktuVUhNZFNJczFJZFNYdDdiNA$eomwTN37R8JXVcqcje45nw",
+            "last_login": "2022-04-11T15:18:51.367Z",
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "Djabrail",
+            "last_name": "Kurdanov",
+            "email": "kurdanovd@gmail.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2022-04-08T14:10:00Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "blango_auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$t6aPacCM3l9zC5aqEEl1Uc$fY6SYHv8PC3HXtQRLqk4m5Gh82f0/u0uv8927kxWqNY=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "user_1",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-04-08T14:18:20.071Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]
