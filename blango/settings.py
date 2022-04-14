@@ -197,8 +197,14 @@ class Dev(Configuration):
 
     AUTH_USER_MODEL = 'blango_auth.User'
 
+    LOGIN_REDIRECT_URL = '/'
+    LOGOUT_REDIRECT_URL = '/'
+    
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    ACCOUNT_ACTIVATION_DAYS = 7
+    REGISTRATION_OPEN = True
+
 
 class Prod(Dev):
     DEBUG = False
     SECRET_KEY = values.SecretValue()
-    
