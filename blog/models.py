@@ -28,7 +28,7 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, 
       on_delete=models.PROTECT)
     title = models.TextField(max_length=100)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     summary = models.TextField(max_length=500)
     content = models.TextField()
     tags = models.ManyToManyField(Tag, related_name="posts")
