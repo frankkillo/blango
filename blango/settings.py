@@ -48,12 +48,17 @@ class Dev(Configuration):
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.messages',
+        'django.contrib.sites',
         'django.contrib.staticfiles',
         'crispy_forms',
         'crispy_bootstrap5',
         'blango_auth',
         'blog.apps.BlogConfig',
         'debug_toolbar',
+        'allauth',
+        'allauth.account',
+        'allauth.socialaccount',
+        'allauth.socialaccount.providers.google',
     ]
 
     MIDDLEWARE = [
@@ -146,6 +151,7 @@ class Dev(Configuration):
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
     CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+    #for send logs to mail with 'mail_admins' handler
     DJANGO_ADMINS = "Djabrail Kurdanov,kurdanovd@gmail.com"
 
     LOGGING = {
@@ -193,16 +199,30 @@ class Dev(Configuration):
         'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
         'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     ]
+
+    #for django-debug-toolbar the list of IP address that are allowed to use DjDT
     INTERNAL_IPS = ['192.168.11.179']
 
+    #for Custom User
     AUTH_USER_MODEL = 'blango_auth.User'
 
     LOGIN_REDIRECT_URL = '/'
     LOGOUT_REDIRECT_URL = '/'
     
+    #for django-registration two-step verification
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     ACCOUNT_ACTIVATION_DAYS = 7
     REGISTRATION_OPEN = True
+    
+    #django-allauth for SocialApp
+    SITE_ID = 1
+
+    #django-allauth settings Custom User
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_USERNAME_REQUIRED = False
+    ACCOUNT_AUTHENTICATION_METHOD = 'email'
+    ACCOUNT_EMAIL_VERIFICATION = True
 
 
 class Prod(Dev):
