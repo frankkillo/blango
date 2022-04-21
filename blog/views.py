@@ -11,11 +11,6 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def index(request):
-    a = request.session
-    #from django.contrib.sessions.models import Session
-    #s = Session.objects.get(pk=a)
-    #print(s.get_decoded())
-    print(a)
     posts = (
         Post.objects.filter(published_at__lte=timezone.now())
         .select_related("author")
