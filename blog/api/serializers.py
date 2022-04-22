@@ -7,7 +7,7 @@ from blog.models import Post, Tag, Comment
 class TagField(serializers.SlugRelatedField):
     def to_internal_value(self, data):
         try:
-            return self.get_queryset().get_or_create(value=data.lower())[0]
+            return self.get_queryset().get_or_create(value=data)[0]
         except (TypeError, ValueError):
             self.fail(f"Tag value {data} is invalid")
 
@@ -59,3 +59,9 @@ class PostDetailSerializer(PostSerializer):
             comment.content_object = instance
             comment.save()
         return instance
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
