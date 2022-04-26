@@ -7,6 +7,10 @@ from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
 from rest_framework.exceptions import PermissionDenied
+from django.db.models import Q
+from datetime import timedelta
+from django.utils import timezone
+from django.http import Http404
 
 from blog.api.serializers import (
     PostSerializer, 
@@ -58,6 +62,41 @@ class PostViewSet(viewsets.ModelViewSet):
         if self.action in ("list", "create"):
             return PostSerializer
         return PostDetailSerializer
+    
+    def get_queryset(self):
+        print(timezone.now() + timedelta(hours=3))
+
+        if self.request.user.is_anonymous:
+            queryset = self.queryset.filter(published_at__lte=timezone.now() + timedelta(hours=3))
+
+        elif self.request.user.is_staff:
+            queryset = self.queryset
+
+        else:
+            queryset = self.queryset.filter(
+                Q(published_at__lte=timezone.now() + timedelta(hours=3)) | Q(author=self.request.user)
+            )
+
+        time_period_name = self.kwargs.get("period_name")
+
+        if not time_period_name:
+            return queryset
+        
+        if time_period_name == "new":
+            return queryset.filter(
+                published_at__gte=timezone.now() + timedelta(hours=3) - timedelta(hours=1)
+            )
+        elif time_period_name == "today":
+            return queryset.filter(
+                published_at__date=timezone.now().date()
+            )
+        elif time_period_name == "week":
+            return queryset.filter(
+                published_at__gte=timezone.now() + timedelta(hours=3) - timedelta(days=7)
+            )
+        else:
+            raise Http404(f"Time period {time_period_name} is not valid, \
+            should be 'new', 'today' or 'week'")
 
     @method_decorator(cache_page(300))
     @method_decorator(vary_on_headers('Authorization'))
@@ -71,5 +110,6 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @method_decorator(cache_page(120))
+    @method_decorator(vary_on_headers('Authorization', "Cookie"))
     def list(self, *args, **kwargs):
         return super(PostViewSet, self).list(*args, **kwargs)
