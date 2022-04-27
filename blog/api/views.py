@@ -12,6 +12,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.http import Http404
 
+from blog.api.filters import PostFilterSet
 from blog.api.serializers import (
     PostSerializer, 
     PostDetailSerializer, 
@@ -39,10 +40,15 @@ class TagViewSet(viewsets.ModelViewSet):
     @action(methods=["get"], detail=True, name="Posts with the Tag")
     def posts(self, request, pk=None):
         tag = self.get_object()
+        page = self.paginate_queryset(tag.posts.all())
+        if page is not None:
+            post_serializer = PostSerializer(
+                page, many=True, context={"request": request}
+            )
+            return self.get_paginated_response(post_serializer.data)
         post_serializer = PostSerializer(
             tag.posts, many=True, context={"request": request}
         )
-
         return Response(post_serializer.data)
     
     @method_decorator(cache_page(300))
@@ -57,6 +63,8 @@ class TagViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
     queryset = Post.objects.all()
+    filterset_class = PostFilterSet
+    ordering_fields = ["published_at", "author", "title", "slug"]
 
     def get_serializer_class(self):
         if self.action in ("list", "create"):
@@ -64,17 +72,15 @@ class PostViewSet(viewsets.ModelViewSet):
         return PostDetailSerializer
     
     def get_queryset(self):
-        print(timezone.now() + timedelta(hours=3))
-
         if self.request.user.is_anonymous:
-            queryset = self.queryset.filter(published_at__lte=timezone.now() + timedelta(hours=3))
+            queryset = self.queryset.filter(published_at__lte=timezone.now())
 
         elif self.request.user.is_staff:
             queryset = self.queryset
 
         else:
             queryset = self.queryset.filter(
-                Q(published_at__lte=timezone.now() + timedelta(hours=3)) | Q(author=self.request.user)
+                Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
             )
 
         time_period_name = self.kwargs.get("period_name")
@@ -84,7 +90,7 @@ class PostViewSet(viewsets.ModelViewSet):
         
         if time_period_name == "new":
             return queryset.filter(
-                published_at__gte=timezone.now() + timedelta(hours=3) - timedelta(hours=1)
+                published_at__gte=timezone.now() - timedelta(hours=1)
             )
         elif time_period_name == "today":
             return queryset.filter(
@@ -92,7 +98,7 @@ class PostViewSet(viewsets.ModelViewSet):
             )
         elif time_period_name == "week":
             return queryset.filter(
-                published_at__gte=timezone.now() + timedelta(hours=3) - timedelta(days=7)
+                published_at__gte=timezone.now() - timedelta(days=7)
             )
         else:
             raise Http404(f"Time period {time_period_name} is not valid, \
@@ -106,6 +112,13 @@ class PostViewSet(viewsets.ModelViewSet):
         if request.user.is_anonymous:
             raise PermissionDenied("You most be logged in to see which Posts are yours")
         posts = self.get_queryset().filter(author=request.user)
+
+        page = self.paginate_queryset(posts)
+        if page:
+            serializer = PostSerializer(page,
+                many=True, context={"request": request})
+            return self.get_paginated_response(serializer.data)
+
         serializer = PostSerializer(posts, many=True, context={"request": request})
         return Response(serializer.data)
 
