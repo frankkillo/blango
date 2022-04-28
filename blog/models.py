@@ -1,9 +1,14 @@
 from django.db import models
 from django.conf import settings
+
+# TO NESTED RELATIONSHIP
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
-# Create your models here.
+#django-versatileimagefield to make image
+from versatileimagefield.fields import VersatileImageField, PPOIField
+
+
 class Tag(models.Model):
     value = models.TextField(max_length=100, unique=True, null=True)
 
@@ -36,6 +41,10 @@ class Post(models.Model):
     content = models.TextField()
     tags = models.ManyToManyField(Tag, related_name="posts")
     comments = GenericRelation(Comment)
+    hero_image = VersatileImageField(
+        upload_to="hero_images", ppoi_field="ppoi", 
+        null=True, blank=True)
+    ppoi= PPOIField(null=True, blank=True)
     published_at = models.DateTimeField(blank=True, null=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     modified_at = models.DateTimeField(auto_now=True)
